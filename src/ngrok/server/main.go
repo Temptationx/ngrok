@@ -11,7 +11,7 @@ import (
 	"runtime/debug"
 	"time"
 	"net/http"
-	"json"
+	"encoding/json"
 )
 
 const (
