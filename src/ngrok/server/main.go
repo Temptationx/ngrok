@@ -10,7 +10,7 @@ import (
 	"os"
 	"runtime/debug"
 	"time"
-	"http"
+	"net/http"
 )
 
 const (
