@@ -93,7 +93,7 @@ func (r *TunnelRegistry) Copy() ([]string) {
 	r.Lock()
 	defer r.Unlock()
 	var clients []string
-	for k, v:=range r.tunnels {
+	for _, v:=range r.tunnels {
 		clients = append(clients, v.url)
 	}
 	return clients
