@@ -10,6 +10,7 @@ import (
 	"os"
 	"runtime/debug"
 	"time"
+	"http"
 )
 
 const (
@@ -97,7 +98,11 @@ func tunnelListener(addr string, tlsConfig *tls.Config) {
 		}(c)
 	}
 }
+type helloHandler struct{}
 
+func (h *helloHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Hello, world!"))
+}
 func Main() {
 	// parse options
 	opts = parseArgs()
@@ -135,7 +140,8 @@ func Main() {
 	if opts.httpsAddr != "" {
 		listeners["https"] = startHttpListener(opts.httpsAddr, tlsConfig)
 	}
-
+	go http.Handle("/", &helloHandler{})
+	go http.ListenAndServe(":12345", nil)
 	// ngrok clients
 	tunnelListener(opts.tunnelAddr, tlsConfig)
 }
