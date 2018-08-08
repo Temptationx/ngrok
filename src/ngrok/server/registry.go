@@ -89,7 +89,15 @@ func (r *TunnelRegistry) Register(url string, t *Tunnel) error {
 
 	return nil
 }
-
+func (r *TunnelRegistry) Copy() ([]string) {
+	r.Lock()
+	defer r.Unlock()
+	var clients []string
+	for k, v:=range r.tunnels {
+		clients = append(clients, v.url)
+	}
+	return clients
+}
 func (r *TunnelRegistry) cacheKeys(t *Tunnel) (ip string, id string) {
 	clientIp := t.ctl.conn.RemoteAddr().(*net.TCPAddr).IP.String()
 	clientId := t.ctl.id
