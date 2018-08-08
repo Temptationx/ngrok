@@ -11,6 +11,7 @@ import (
 	"runtime/debug"
 	"time"
 	"net/http"
+	"json"
 )
 
 const (
@@ -101,8 +102,15 @@ func tunnelListener(addr string, tlsConfig *tls.Config) {
 type helloHandler struct{}
 
 func (h *helloHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Hello, world!"))
+	if tunnelRegistry != nil{
+		clients := tunnelRegistry.Copy()
+		b, _ := json.Marshal(clients)
+		if b != nil{
+			w.Write(b)
+		}
+	}
 }
+
 func Main() {
 	// parse options
 	opts = parseArgs()
